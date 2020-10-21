@@ -45,7 +45,7 @@ class Scorecard:
         if category in Scorecard.Numbers:
             score = counts[Scorecard.Numbers[category]-1] * Scorecard.Numbers[category]
         elif category == "company":
-            score = 40 if sorted(self.scorecard) == [1,2,3,4,5] else 0
+            score = 40 if sorted(dice) == [1,2,3,4,5] or sorted(dice) == [2,3,4,5,6] else 0
         elif category == "prattle":
             score = 30 if (len(set([1,2,3,4]) - set(dice)) == 0 or len(set([2,3,4,5]) - set(dice)) == 0 or len(set([3,4,5,6]) - set(dice)) == 0) else 0
         elif category == "squadron":
