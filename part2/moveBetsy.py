@@ -9,7 +9,7 @@ import numpy as np
 #     for val in board:
 #         return [val[col] for val in board]
 
-
+isValid = True
 
 def getStraightMoves(friend,bird,row,col,board):
     moves = []
@@ -18,7 +18,7 @@ def getStraightMoves(friend,bird,row,col,board):
         board1 = np.copy(board)
         if board[row][x] in friend:
             break
-        else:
+        elif(isValid):
             if board[row][x] == '.':
                 board1[row][x] = bird
                 board1[row][col] = '.'
@@ -183,7 +183,7 @@ def getKingfisherMoves(friend,bird,row,col,board):
                 board1[row][col] = '.'
                 moves.append(board1)
 
-    return moves
+        return moves
 
 def getNightMove(friend,bird,row,col,board):
     pos = []
@@ -213,18 +213,40 @@ def getParakeetMove(color,friend,bird,row,col,board):
     Quetzal = ['Q' if color == 'w' else 'q']
     if (row > 0 and row < 6):
         board1 = np.copy(board)
-        if (board[row + 1][col - 1] not in friend and board[row + 1][col - 1] != '.'):
-            board1[row + 1][col - 1] = bird
-            board1[row][col] = '.'
-            pos.append((row + 1, col - 1, board1))
-        elif (board[row + 1][col + 1] not in friend and board[row + 1][col + 1] != '.'):
-            board1[row + 1][col + 1] = bird
-            board1[row][col] = '.'
-            pos.append((row + 1, col + 1, board1))
-        elif board[row + 1][col] == '.':
-            board1[row + 1][col] = bird
-            board1[row][col] = '.'
-            pos.append((row + 1, col, board1))
+        if (col > 0 and col < 7):
+            if (board[row + 1][col - 1] not in friend and board[row + 1][col - 1] != '.'):
+                board1[row + 1][col - 1] = bird
+                board1[row][col] = '.'
+                pos.append((row + 1, col - 1, board1))
+            elif (board[row + 1][col + 1] not in friend and board[row + 1][col + 1] != '.'):
+                board1[row + 1][col + 1] = bird
+                board1[row][col] = '.'
+                pos.append((row + 1, col + 1, board1))
+            elif board[row + 1][col] == '.':
+                board1[row + 1][col] = bird
+                board1[row][col] = '.'
+                pos.append((row + 1, col, board1))
+        elif col == 0:
+            if (board[row + 1][col + 1] not in friend and board[row + 1][col + 1] != '.'):
+                board1[row + 1][col + 1] = bird
+                board1[row][col] = '.'
+                pos.append((row + 1, col + 1, board1))
+            elif board[row + 1][col] == '.':
+                board1[row + 1][col] = bird
+                board1[row][col] = '.'
+                pos.append((row + 1, col, board1))
+        elif col == 7:
+            if (board[row + 1][col - 1] not in friend and board[row + 1][col - 1] != '.'):
+                board1[row + 1][col - 1] = bird
+                board1[row][col] = '.'
+                pos.append((row + 1, col - 1, board1))
+            elif board[row + 1][col] == '.':
+                board1[row + 1][col] = bird
+                board1[row][col] = '.'
+                pos.append((row + 1, col, board1))
+
+
+        
     
     if row == 1:
         board1 = np.copy(board)
@@ -235,18 +257,37 @@ def getParakeetMove(color,friend,bird,row,col,board):
 
     if row == 6:
         board1 = np.copy(board)
-        if (board[7][col - 1] not in friend and board[row + 1][col - 1] != '.'):
-            board1[7][col - 1] = Quetzal 
-            board1[row][col] = '.'
-            pos.append((7, col - 1, board1))
-        elif (board[7][col + 1] not in friend and board[row + 1][col + 1] != '.'):
-            board1[7][col + 1] = Quetzal
-            board1[row][col] = '.'
-            pos.append((7, col + 1, board1))
-        elif board[7][col] == '.':
-            board1[7][col] = Quetzal
-            board1[row][col] = '.'
-            pos.append((7, col, board1))
+        if (col > 0 and col < 7):
+            if (board[7][col - 1] not in friend and board[row + 1][col - 1] != '.'):
+                board1[7][col - 1] = Quetzal 
+                board1[row][col] = '.'
+                pos.append((7, col - 1, board1))
+            elif (board[7][col + 1] not in friend and board[row + 1][col + 1] != '.'):
+                board1[7][col + 1] = Quetzal
+                board1[row][col] = '.'
+                pos.append((7, col + 1, board1))
+            elif board[7][col] == '.':
+                board1[7][col] = Quetzal
+                board1[row][col] = '.'
+                pos.append((7, col, board1))
+        elif col == 0:
+            if (board[7][col + 1] not in friend and board[row + 1][col + 1] != '.'):
+                board1[7][col + 1] = Quetzal
+                board1[row][col] = '.'
+                pos.append((7, col + 1, board1))
+            elif board[7][col] == '.':
+                board1[7][col] = Quetzal
+                board1[row][col] = '.'
+                pos.append((7, col, board1))
+        elif col == 7:
+            if (board[7][col - 1] not in friend and board[row + 1][col - 1] != '.'):
+                board1[7][col - 1] = Quetzal 
+                board1[row][col] = '.'
+                pos.append((7, col - 1, board1))
+            elif board[7][col] == '.':
+                board1[7][col] = Quetzal
+                board1[row][col] = '.'
+                pos.append((7, col, board1))
 
     for p in pos:
         if p[0] >= 0 and p[0] <= 7 and p[1] >= 0 and p[1] <= 7:
