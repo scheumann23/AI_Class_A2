@@ -1,9 +1,8 @@
 # Automatic Sebastian game player
 # B551 Fall 2020
-# PUT YOUR NAME AND USER ID HERE!
+# Cody Harris - Neelan Scheumann - Vishal Bhalla
 #
 # Based on skeleton code by D. Crandall
-#
 #
 # This is the file you should modify to create your new smart player.
 # The main program calls this program three times for each turn. 
@@ -28,16 +27,18 @@ import random
 
 class SebastianAutoPlayer:
 
-
     def __init__(self):
         self.numbers = { "primis" : 1, "secundus" : 2, "tertium" : 3, "quartus" : 4, "quintus" : 5, "sextus" : 6 }
         self.upper_cats = [ "primis", "secundus", "tertium", "quartus", "quintus", "sextus" ]
         self.lower_cats = [ "triplex", "quadrupla", "squadron", "prattle", "company", "quintuplicatam", "pandemonium" ]
-
+    
+    # Idea derived from combos3() function in program examined in 
+    # Module 10.6 of CSCI 551 - Fall 2020
     def combo(self, rolls): 
         return [(a1, a2, a3, a4, a5) for a1 in rolls[0] for a2 in rolls[1] for a3 in rolls[2] for a4 in rolls[3] \
                 for a5 in rolls[4]]
-
+    
+    # Function built using code from SebastionState.py
     def roll_score(self, dice, category):
         counts = [dice.count(i) for i in range(1,7)]
         if category in self.numbers:
@@ -57,7 +58,7 @@ class SebastianAutoPlayer:
         elif category == "pandemonium":
             score = sum(dice)
         return score
-
+    
     def choose_score(self, dice, scorecard):
         available_upper_cats = [category for category in self.upper_cats if category not in scorecard]
         available_lower_cats = [category for category in self.lower_cats[:-1] if category not in scorecard]
@@ -88,14 +89,17 @@ class SebastianAutoPlayer:
                 return cat
         return max(score_dict.items(), key=lambda i: i[1])[0]
 
+    # Idea derived from expectation_of_reroll() function in program examined in 
+    # Module 10.6 of CSCI 551 - Fall 2020
     def expected_value(self, roll, reroll, scorecard):
         outcomes = self.combo([((roll[die],) if not reroll[die] else range(1, 7)) for die in range(0,5)])
         return sum([self.choose_score(outcome, scorecard) for outcome in outcomes]) / len(outcomes)
         
+    # Idea derived from max_layer() function in program examined in 
+    # Module 10.6 of CSCI 551 - Fall 2020
     def best_strat(self, roll, scorecard):
         best_roll = max([(reroll, self.expected_value(roll, reroll, scorecard)) for reroll in self.combo(((True, False),) * 5)], key = lambda item:item[1])
         return [i for i in range(0,5) if best_roll[0][i]]
-
 
     def first_roll(self, dice, scorecard):
         return self.best_strat(dice.dice, scorecard.scorecard)
