@@ -14,6 +14,16 @@ points = {'p': 100,'n': 320,'b': 330,'r': 500,'q': 900,'k': 20000, 'P': 100,'N':
 def getVal(piece):
     return points[piece]
 
+def numEval(board, friend, foe):
+    favor = 0
+    against = 0
+    for x in range(0,board.shape[1]):
+        for y in range(0,board.shape[0]):
+            if board[x][y] in friend:
+                favor += 1
+            elif board[x][y] in foe:
+                against += 1
+    return abs((favor - against))
 
 def pieceEval(board, friend, foe):
     favor = 0
@@ -45,7 +55,10 @@ def evalBoard(color,board):
     else:
         friend = 'pnbrqk'
         foe = 'PNBRQK'
+
     rowWeight = rowEval(board, friend, foe)
     pieceWeight = pieceEval(board,friend,foe)
-    return rowWeight + pieceWeight
+    numPieces = numEval(board,friend,foe)
+
+    return rowWeight + pieceWeight + numPieces
 
