@@ -1,6 +1,76 @@
 import sys
-from betsyPlay import play
+from moveBetsy import moveBird
+import random
+import numpy as np
 
+def arrangeBoard(board):
+    brd = np.reshape(board,(8,8))
+    return brd
+
+
+def evaluation_function(board):
+    return (random.randint(1,5), board)
+
+
+def rotate_board(board):
+    brd = board.copy()
+    for i in range(len(board)):
+        for j in range(len(board[0])):
+            brd[i, len(board[0])-1-j] = board[len(board)-1-i, j]
+    return brd
+
+
+def successor(color, board):
+    nextMoves = []
+    friend = 'PNBRQK' if color == 'w' else 'pnbrqk'
+    board_list = [(col + len(board)*row, board[row][col]) for row in range(len(board)) for col in range(len(board[0]))]
+    for i,j in board_list:
+        if j in friend:
+            for move in moveBird(color,friend,j,i//8,i%8,board):
+                nextMoves.append(move)
+    return nextMoves
+
+
+def maximize(depth, board, color, max_depth):
+    max_value = -1000000
+    best_move = board
+    op_color = 'w' if color == 'b' else 'b'
+    if depth == max_depth:
+        return evaluation_function(board)
+    for move in successor(color, board):
+        score, _ = minimize(depth+1, rotate_board(move), op_color, max_depth)
+        if score > max_value:
+            max_value = score
+            best_move = move
+    return (max_value, best_move)
+
+
+def minimize(depth, board, color, max_depth):
+    min_value = 1000000
+    best_move = board
+    op_color = 'w' if color == 'b' else 'b'
+    if depth == max_depth:
+        return evaluation_function(board)
+    for move in successor(color, board):
+        score, _ = maximize(depth+1, rotate_board(move), op_color, max_depth)
+        if score < min_value:
+            min_value = score
+            best_move = move
+    return (min_value, best_move)
+
+
+def nice_output(board):
+    out = ''
+    for row in range(len(board)):
+        for col in range(len(board[0])):
+            out += board[row][col]
+    return out
+
+
+def choose(board, color, max_depth):
+    best_choice = maximize(1, board, color, max_depth)
+    return nice_output(best_choice[1])
+        
 
 if __name__ == "__main__":
     
@@ -13,13 +83,13 @@ if __name__ == "__main__":
 
     if(len(sys.argv[2]) != 64):
         raise(Exception("Error: Board should be exact 64 squares"))
-
-    player = sys.argv[1]
-    init_board = sys.argv[2]
+    
+    color = str(sys.argv[1])
+    board = arrangeBoard(list(sys.argv[2]))
     timeout = sys.argv[3]
-    next_move = play(player,init_board,timeout)
-    print(next_move)
+    max_depth = 5
 
+    print(choose(board, color, max_depth))
     
 
     
