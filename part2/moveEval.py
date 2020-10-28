@@ -1,13 +1,20 @@
 import sys
 import time
-import re
 import numpy as np
+
 
 #
 # The points and board weights have been taken 
 # from https://www.chessprogramming.org/Simplified_Evaluation_Function
 #
 #points = [100,320,330,500,900,20000]
+
+def rotate_board(board):
+    brd = board.copy()
+    for i in range(len(board)):
+        for j in range(len(board[0])):
+            brd[i][len(board[0])-1-j] = board[len(board)-1-i][j]
+    return brd
 
 points = {'p': 100,'n': 320,'b': 330,'r': 500,'q': 900,'k': 20000, 'P': 100,'N': 320,'B': 330,'R': 500,'Q': 900,'K': 20000}
 
@@ -20,7 +27,7 @@ wparakeet = [[  0,   0,   0,   0,   0,   0,   0,   0],
  [  5,  10,  10, -20, -20,  10,  10,   5],
  [  0,   0,   0,   0,   0,   0,   0,   0]]
 
-bparakeet = wparakeet[::-1]
+bparakeet = rotate_board(wparakeet)
 
 wnighthawk = [[-50, -40, -30, -30, -30, -30, -40, -50],
  [-40, -20,   0,   0,   0,   0, -20, -40],
@@ -31,7 +38,7 @@ wnighthawk = [[-50, -40, -30, -30, -30, -30, -40, -50],
  [-40, -20,   0,   5,   5,   0, -20, -40],
  [-50, -40, -30, -30, -30, -30, -40, -50]]
 
-bnighthawk = wnighthawk[::-1]
+bnighthawk = rotate_board(wnighthawk)
 
 wbluejay = [[-20, -10, -10, -10, -10, -10, -10, -20],
  [-10,   0,   0,   0,   0,   0,   0, -10],
@@ -42,7 +49,7 @@ wbluejay = [[-20, -10, -10, -10, -10, -10, -10, -20],
  [-10,   5,   0,   0,   0,   0,   5, -10],
  [-20, -10, -10, -10, -10, -10, -10, -20]]
 
-bbluejay = wbluejay[::-1]
+bbluejay = rotate_board(wbluejay)
 
 wrobin = [[ 0,  0,  0,  0,  0,  0,  0,  0],
  [ 5, 10, 10, 10, 10, 10, 10,  5],
@@ -53,7 +60,7 @@ wrobin = [[ 0,  0,  0,  0,  0,  0,  0,  0],
  [-5,  0,  0,  0,  0,  0,  0, -5],
  [ 0,  0,  0,  5,  5,  0,  0,  0]]
 
-brobin = wrobin[::-1]
+brobin = rotate_board(wrobin)
 
 wquetzal = [[-20, -10, -10,  -5,  -5, -10, -10, -20],
  [-10,   0,   0,   0,   0,   0,   0, -10],
@@ -64,7 +71,7 @@ wquetzal = [[-20, -10, -10,  -5,  -5, -10, -10, -20],
  [-10,   0,   5,   0,   0,   0,   0, -10],
  [-20, -10, -10,  -5,  -5, -10, -10, -20]]
 
-bquetzal = wquetzal[::-1]
+bquetzal = rotate_board(wquetzal)
 
 wkingfisher = [[-30, -40, -40, -50, -50, -40, -40, -30],
  [-30, -40, -40, -50, -50, -40, -40, -30],
@@ -75,7 +82,7 @@ wkingfisher = [[-30, -40, -40, -50, -50, -40, -40, -30],
  [ 20,  20,   0,   0,   0,   0,  20,  20],
  [ 20,  30,  10,   0,   0,  10,  30,  20]]
 
-bkingfisher = wkingfisher[::-1]
+bkingfisher = rotate_board(wkingfisher)
 
 
 def getVal(piece, row, col):
