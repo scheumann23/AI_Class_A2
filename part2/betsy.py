@@ -2,6 +2,7 @@ import sys
 from moveBetsy import moveBird
 import random
 import numpy as np
+from moveEval import evalBoard
 
 def arrangeBoard(board):
     brd = np.reshape(board,(8,8))
@@ -31,31 +32,41 @@ def successor(color, board):
     return nextMoves
 
 
-def maximize(depth, board, color, max_depth):
+def maximize(depth, board, color, max_depth, alpha, beta):
     max_value = -1000000
     best_move = board
     op_color = 'w' if color == 'b' else 'b'
     if depth == max_depth:
-        return evaluation_function(board)
+        return evalBoard(color, board)
     for move in successor(color, board):
-        score, _ = minimize(depth+1, rotate_board(move), op_color, max_depth)
+        score, _ = minimize(depth+1, rotate_board(move), op_color, max_depth, alpha, beta)
         if score > max_value:
             max_value = score
             best_move = move
+        if max_value >= beta:
+            return (max_value, best_move)
+        if max_value > alpha:
+            alpha = max_value
+
     return (max_value, best_move)
 
 
-def minimize(depth, board, color, max_depth):
+def minimize(depth, board, color, max_depth, alpha, beta):
     min_value = 1000000
     best_move = board
     op_color = 'w' if color == 'b' else 'b'
     if depth == max_depth:
-        return evaluation_function(board)
+        return evalBoard(color, board)
     for move in successor(color, board):
-        score, _ = maximize(depth+1, rotate_board(move), op_color, max_depth)
+        score, _ = maximize(depth+1, rotate_board(move), op_color, max_depth, alpha, beta)
         if score < min_value:
             min_value = score
             best_move = move
+        if min_value <= alpha:
+            return (min_value, best_move)
+        if min_value < beta:
+            beta = min_value
+
     return (min_value, best_move)
 
 
@@ -67,8 +78,8 @@ def nice_output(board):
     return out
 
 
-def choose(board, color, max_depth):
-    best_choice = maximize(1, board, color, max_depth)
+def choose(board, color, max_depth, alpha, beta):
+    best_choice = maximize(1, board, color, max_depth, alpha, beta)
     return nice_output(best_choice[1])
         
 
@@ -88,8 +99,10 @@ if __name__ == "__main__":
     board = arrangeBoard(list(sys.argv[2]))
     timeout = sys.argv[3]
     max_depth = 5
+    alpha = -1000000
+    beta = 1000000
 
-    print(choose(board, color, max_depth))
+    print(choose(board, color, max_depth, alpha, beta))
     
 
     
