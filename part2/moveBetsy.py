@@ -18,7 +18,7 @@ def getStraightMoves(friend,bird,row,col,board):
         board1 = np.copy(board)
         if board[row][x] in friend:
             break
-        elif(isValid):
+        else:
             if board[row][x] == '.':
                 board1[row][x] = bird
                 board1[row][col] = '.'
@@ -43,6 +43,7 @@ def getStraightMoves(friend,bird,row,col,board):
                 board1[row][col] = '.'
                 moves.append(board1)
                 break
+
 
 # Vertical Moves
     for x in range(row-1,-1,-1):
@@ -82,6 +83,7 @@ def getDiagonalMoves(friend,bird,row,col,board):
 # Left Upper Diagonal moves
     x = row - 1
     y = col - 1
+
     while x > -1 and y > -1:
         board1 = np.copy(board)
         if board[x][y] in friend:
@@ -136,7 +138,6 @@ def getDiagonalMoves(friend,bird,row,col,board):
                 board1[x][y] = bird
                 board1[row][col] = '.'
                 moves.append(board1)
-                break
         x = x + 1
         y = y - 1
 
@@ -250,7 +251,7 @@ def getParakeetMove(color,friend,bird,row,col,board):
     
     if row == 1:
         board1 = np.copy(board)
-        if (board[row + 1][col] == '.' and board[row + 2][col] == '.'): 
+        if (board[row + 1][col] == '.' and board[row + 2][col] == '.'):
             board1[row + 2][col] = bird
             board1[row][col] = '.'
             pos.append((row + 2, col, board1))
@@ -301,10 +302,16 @@ def moveBird(color,friend,bird,row,col,board):
     elif bird in ('bB'):
         return getDiagonalMoves(friend,bird,row,col,board)
     elif bird in ('qQ'):
+        # print("board",board)
+        # print("diag",getDiagonalMoves(friend,bird,row,col,board))
+        # print("straight",getStraightMoves(friend,bird,row,col,board))
+        #print("In Move Betsy",getDiagonalMoves(friend,bird,row,col,board) + getStraightMoves(friend,bird,row,col,board))
         return getDiagonalMoves(friend,bird,row,col,board) + getStraightMoves(friend,bird,row,col,board)
     elif bird in ('kK'):
         return getKingfisherMoves(friend,bird,row,col,board)
     elif bird in ('nN'):
         return getNightMove(friend,bird,row,col,board)
     elif bird in ('pP'):
+        # if bird == 'p' and row == 1 and col == 6:
+        #     print(board,getParakeetMove(color,friend,bird,row,col,board))
         return getParakeetMove(color,friend,bird,row,col,board)
