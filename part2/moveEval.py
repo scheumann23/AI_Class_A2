@@ -159,7 +159,7 @@ def posEval(board, friend, foe):
                 favor += getVal(board[x][y], x, y)
             elif board[x][y] in foe:
                 against += getVal(board[x][y], x, y)
-    return abs((favor - against))
+    return (favor - against)
 
 def evalBoard(color,board):
     if color == 'w':

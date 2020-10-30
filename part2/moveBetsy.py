@@ -138,6 +138,7 @@ def getDiagonalMoves(friend,bird,row,col,board):
                 board1[x][y] = bird
                 board1[row][col] = '.'
                 moves.append(board1)
+                break
         x = x + 1
         y = y - 1
 
