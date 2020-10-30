@@ -126,7 +126,7 @@ def numEval(board, friend, foe):
                 favor += 1
             elif board[x][y] in foe:
                 against += 1
-    return abs((favor - against))
+    return (favor - against)
 
 def pieceEval(board, friend, foe):
     favor = 0
@@ -137,7 +137,7 @@ def pieceEval(board, friend, foe):
                 favor += getPoint(board[x][y])
             elif board[x][y] in foe:
                 against += getPoint(board[x][y])
-    return abs((favor - against))
+    return (favor - against)
 
 def rowEval(board, friend, foe):
     favor = 0
@@ -148,7 +148,7 @@ def rowEval(board, friend, foe):
                 favor += x
             elif board[x][y] in foe:
                 against += 7-x
-    return abs((favor - against))
+    return (favor - against)
 
 def posEval(board, friend, foe):
     favor = 0

@@ -71,7 +71,7 @@ def minimize(depth, board, color, max_depth, alpha, beta):
 
 
 def nice_output(board,color):
-    print(board)
+    #print(board)
     if color == 'b':
         board = rotate_board(board)
     out = ''
@@ -82,7 +82,7 @@ def nice_output(board,color):
 
 
 def choose(board, color, max_depth, alpha, beta):
-    print("board",board)
+    #print("board",board)
     best_choice = maximize(1, board, color, max_depth, alpha, beta)
     return nice_output(best_choice[1],color)
         
@@ -102,7 +102,7 @@ if __name__ == "__main__":
     color = str(sys.argv[1])
     board = arrangeBoard(list(sys.argv[2]))
     timeout = sys.argv[3]
-    max_depth = 3
+    max_depth = 5
     alpha = -1000000
     beta = 1000000
 
