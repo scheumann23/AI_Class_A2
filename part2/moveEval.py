@@ -165,15 +165,18 @@ def evalBoard(color,board):
     if color == 'w':
         friend = 'PNBRQK'
         foe = 'pnbrqk'
+        kingval = 1000000 if 'k' not in board else -1000000 if 'K' not in board else 0
     else:
         friend = 'pnbrqk'
         foe = 'PNBRQK'
+        kingval = -1000000 if 'k' not in board else 1000000 if 'K' not in board else 0
+
 
     #rowWeight = rowEval(board, friend, foe)
     pieceWeight = pieceEval(board,friend,foe)
-    numPieces = numEval(board,friend,foe)
+    #numPieces = numEval(board,friend,foe)
     positionalValue = posEval(board, friend, foe)
 
-    return (positionalValue + pieceWeight + numPieces, board)
+    return (positionalValue + pieceWeight + kingval, board)
     #return (numPieces + pieceWeight, board)
 
