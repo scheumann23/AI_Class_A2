@@ -23,3 +23,21 @@ Lastly, if none of the above logic is satisfied, then the category with the high
 ## Problems, Assumptions, Simplifications, and Design Choices
 
 The main assumption we make that simplifies this program is that on the first roll, we do not do anything different than we will subsequently do in the second roll. We discussed that possibly the program should consider that it is the first roll and then know that it should not only enumerate all possible scenarios to select, but also look at all the possible scenarios that come from that first roll. The problem was, that when looking two moves ahead the program was much too slow to be viable because of the vast amount of possibilites that occur from looking two rolls ahead.
+
+
+# Part 2: Betsy
+
+## Problem Formulation
+
+The game of Betsy is a simplified version of chess where the chess pieces are replaced by various Bird species and complicated moves like Castling are not allowed. The input board to the program will be provided, along with the color of the player the program represents and the time limit within which the move should be completed
+
+## How the Program Works
+
+There are three parts of the program based on the kind of work they perform, one is the driver, which accepts the input, performs minimax with alpha beta pruning and prints the output. The 2nd part of the program is the one which identifies the moves that the pieces can make. These form the successor for any given move under consideration. The third and the final part is the one that evaluates the board based on the evaluation algorithm built into the program.
+
+The program first generates the tree up to the max depth level specified and then calls the evaluation function to get the evaluation of the leaf nodes and based on the same identifies the best move by quickly pruning the tree and traversing over it and returning the best move.
+
+For our evaluation function we have tried multiple algorithms, based on the number of pieces on the board, number of rows moved, piece weights, position weights(this we got from https://www.chessprogramming.org/Simplified_Evaluation_Function) and we also tried to load the weightage heavily when the move would mean a loss of king. 
+
+## Problems, Assumptions, Simplifications, and Design Choices
+Due to the huge branching factor involved we are facing issues going beyond the depth of level 4 and most of the times are restricted to 3 levels. We are looking at making that working better. Further we are currently using an evaluation function in which we have merged both piece and position weights in one function, we need to see if it can further be improved. The other majir issue we see is that our AI seems to shy away from attacking the other AI, we need to work on the same.
