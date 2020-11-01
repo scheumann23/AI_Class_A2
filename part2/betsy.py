@@ -102,14 +102,15 @@ if __name__ == "__main__":
     color = str(sys.argv[1])
     board = arrangeBoard(list(sys.argv[2]))
     timeout = sys.argv[3]
-    max_depth = 5
+    
     alpha = -1000000
     beta = 1000000
 
     if color == 'b':
         board = rotate_board(board)
-
+    max_depth = 3
     print(choose(board, color, max_depth, alpha, beta))
-    
+    max_depth = 6
+    print(choose(board, color, max_depth, alpha, beta))
 
     
