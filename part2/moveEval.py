@@ -88,6 +88,24 @@ bkingfisher = wkingfisher[::-1]
 #bquetzal = rotate_board(wquetzal)
 #bkingfisher = rotate_board(wkingfisher)
 
+endgame = [[0,0,0,0,0,0,0,0],
+ [ 0,  0,  0,  0,  0,  0,  0,  0],
+ [ 0,  0,  0,  0,  0,  0,  0,  0],
+ [ 0,  0,  0,  0,  0,  0,  0,  0],
+ [ 0,  0,  0,  0,  0,  0,  0,  0],
+ [ 0,  0,  100,  100,  100,  100,  100,  0],
+ [ 0,  0,  100,  200,  200,  200,  100,  0],
+ [ 0,  0,  100,  200,  300,  200,  100,  0]]
+
+center = [[0,0,0,0,0,0,0,0],
+ [ 0,  0,  0,  0,  0,  0,  0,  0],
+ [ 0,  0,  100,  100,  100,  100,  0,  0],
+ [ 0,  0,  100,  200,  200,  100,  0,  0],
+ [ 0,  0,  100,  200,  200,  100,  0,  0],
+ [ 0,  0,  100,  100,  100,  100,  0,  0],
+ [ 0,  0,  0,  0,  0,  0,  0,  0],
+ [ 0,  0,  0,  0,  0,  0,  0,  0],]
+
 def getVal(piece, row, col):
     if piece == 'P':
         return (wparakeet[row][col]) + 100
@@ -157,19 +175,32 @@ def rowEval(board, friend, foe):
 
 # combination of numEval and pieceEval function
 def posEval(board,color, friend, foe):
-    #favor = 0
-    #against = 0
     boardVal = 0
-    for x in range(0,board.shape[1]):
-        for y in range(0,board.shape[0]):
+    for x in range(0,8):
+        for y in range(0,8):
             boardVal += getVal(board[x][y], x, y)
-            #if board[x][y] in friend:
-            #    favor += getVal(board[x][y], x, y)
-            #elif board[x][y] in foe:
-            #    against += getVal(board[x][y], x, y)
-    #return (favor - against)
     # For minimizing player return the -ve of the absolute value
     return boardVal if color=='w' else  -1*boardVal
+
+# Attack on King weights
+def endEval(board,color,friend):
+    boardVal = 0
+    for x in range(5,8):
+        for y in range(2,7):
+            boardVal += endgame[x][y] if board[x][y] in friend else 0
+    # For minimizing player return the -ve of the absolute value
+    return boardVal if color=='w' else  -1*boardVal
+
+
+# Heuristic to determine the hold on central locations
+def holdCenter(board,color,friend,foe):
+    boardVal = 0
+    for x in range(3,7):
+        for y in range(3,7):
+            boardVal += center[x][y] if board[x][y] in friend else -1*center[x][y] if board[x][y] in foe else 0
+    # For minimizing player return the -ve of the absolute value
+    return boardVal if color=='w' else  -1*boardVal
+
 
 def evalBoard(color,board):
     if color == 'w':
@@ -187,5 +218,8 @@ def evalBoard(color,board):
     #positionalValue = posEval(board, friend, foe)
 
     # Call the position evaluation function that returns both piece val and piece position val
-    return (posEval(board,color, friend, foe) + kingval , board)
+    #return (kingval + posEval(board,color, friend, foe) + holdCenter(board,color,friend,foe) + endEval(board,color, friend), board)
+    return (kingval + posEval(board,color, friend, foe) + holdCenter(board,color,friend,foe), board)
+    #return (kingval + posEval(board,color, friend, foe) + endEval(board,color,friend), board)
     #return (numPieces + pieceWeight + kingval, board)
+
