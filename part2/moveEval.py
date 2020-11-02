@@ -4,7 +4,7 @@ import numpy as np
 
 
 #
-# The points and board weights have been taken 
+# The points and board weights have been taken
 # from https://www.chessprogramming.org/Simplified_Evaluation_Function
 #
 #points = [100,320,330,500,900,20000]
@@ -75,52 +75,79 @@ wkingfisher = [[-30, -40, -40, -50, -50, -40, -40, -30],
 
 # Reversing the points board for Black Pieces
 
-#bparakeet = wparakeet[::-1]
-bparakeet = rotate_board(wparakeet)
-#bnighthawk = wnighthawk[::-1]
-bnighthawk = rotate_board(wnighthawk)
-#bbluejay = wbluejay[::-1]
-bbluejay = rotate_board(wbluejay)
-#brobin = wrobin[::-1]
-brobin = rotate_board(wrobin)
-#bquetzal = wquetzal[::-1]
-bquetzal = rotate_board(wquetzal)
-#bkingfisher = wkingfisher[::-1]
-bkingfisher = rotate_board(wkingfisher)
+bparakeet = wparakeet[::-1]
+bnighthawk = wnighthawk[::-1]
+bbluejay = wbluejay[::-1]
+brobin = wrobin[::-1]
+bquetzal = wquetzal[::-1]
+bkingfisher = wkingfisher[::-1]
+#bparakeet = rotate_board(wparakeet)
+#bnighthawk = rotate_board(wnighthawk)
+#bbluejay = rotate_board(wbluejay)
+#brobin = rotate_board(wrobin)
+#bquetzal = rotate_board(wquetzal)
+#bkingfisher = rotate_board(wkingfisher)
 
-def getVal(piece, clr, row, col):
-    if piece == 'p':
-        return (bparakeet[row][col]) + 100*clr
-    elif piece == 'P':
-        return (wparakeet[row][col]) + 100*clr
-    elif piece == 'n':
-        return (bnighthawk[row][col]) + 320*clr
+centking = [[0,0,0,0,0,0,0,0],
+ [ 0,  0,  0,  0,  0,  0,  0,  0],
+ [ 0,  0,  10,  20,  20,  10,  0],
+ [ 0,  0,  10,  20,  20,  10,  0,  0],
+ [ 0,  0,  10,  20,  20,  10,  0,  0],
+ [ 0,  0,  10,  10,  10,  10,  10,  0],
+ [ 0,  0,  10,  20,  20,  20,  10,  0],
+ [ 0,  0,  10,  20,  30,  20,  10,  0]]
+
+center = [[0,0,0,0,0,0,0,0],
+ [ 0,  0,  0,  0,  0,  0,  0,  0],
+ [ 0,  0,  100,  100,  100,  100,  0,  0],
+ [ 0,  0,  100,  200,  200,  100,  0,  0],
+ [ 0,  0,  100,  200,  200,  100,  0,  0],
+ [ 0,  0,  100,  100,  100,  100,  0,  0],
+ [ 0,  0,  0,  0,  0,  0,  0,  0],
+ [ 0,  0,  0,  0,  0,  0,  0,  0],]
+
+endgame = [[0,0,0,0,0,0,0,0],
+ [ 0,  0,  0,  0,  0,  0,  0,  0],
+ [ 0,  0,  0,  0,  0,  0,  0,  0],
+ [ 0,  0,  0,  0,  0,  0,  0,  0],
+ [ 0,  0,  0,  0,  0,  0,  0,  0],
+ [ 0,  0,  100,  100,  100,  100,  100,  0],
+ [ 0,  0,  100,  200,  200,  200,  100,  0],
+ [ 0,  0,  100,  200,  300,  200,  100,  0]]
+
+
+def getVal(piece, row, col):
+    if piece == 'P':
+        return (wparakeet[row][col]) + 100
+    elif piece == 'p':
+        return (bparakeet[row][col]) - 100
     elif piece == 'N':
-        return (wnighthawk[row][col]) + 320*clr
+        return (wnighthawk[row][col]) + 320
+    elif piece == 'n':
+        return (bnighthawk[row][col]) - 320
     elif piece == 'B':
-        return (wbluejay[row][col]) + 330*clr
+        return (wbluejay[row][col]) + 330
     elif piece == 'b':
-        return (bbluejay[row][col]) + 330*clr
+        return (bbluejay[row][col]) - 330
     elif piece == 'R':
-        return (wrobin[row][col]) + 500*clr
+        return (wrobin[row][col]) + 500
     elif piece == 'r':
-        return (brobin[row][col]) + 500*clr
+        return (brobin[row][col]) - 500
     elif piece == 'Q':
-        return (wquetzal[row][col]) + 900*clr
+        return (wquetzal[row][col]) + 900
     elif piece == 'q':
-        return (bquetzal[row][col]) + 900*clr
+        return (bquetzal[row][col]) - 900
     elif piece == 'K':
-        return (wkingfisher[row][col]) + 20000*clr
+        return (wkingfisher[row][col]) + 20000
     elif piece == 'k':
-        return (bkingfisher[row][col]) + 20000*clr
+        return (bkingfisher[row][col]) - 20000
     else:
         return 0
-
-
 
 def getPoint(piece):
     return points[piece]
 
+# Returns the difference of number of pieces
 def numEval(board, friend, foe):
     favor = 0
     against = 0
@@ -132,6 +159,7 @@ def numEval(board, friend, foe):
                 against += 1
     return (favor - against)
 
+# Returns the value based on the piece values assigned
 def pieceEval(board, friend, foe):
     favor = 0
     against = 0
@@ -143,6 +171,7 @@ def pieceEval(board, friend, foe):
                 against += getPoint(board[x][y])
     return (favor - against)
 
+# Returns the evaluation based on what row the piece is in
 def rowEval(board, friend, foe):
     favor = 0
     against = 0
@@ -154,31 +183,50 @@ def rowEval(board, friend, foe):
                 against += 7-x
     return (favor - against)
 
-def posEval(board, color):
-    clr = 1 if color == 'w' else -1
-    total = 0
-    for x in range(0,board.shape[1]):
-        for y in range(0,board.shape[0]):
-            total += getVal(board[x][y],clr, x, y)
-    return total
+# combination of numEval and pieceEval function
+def posEval(board,color, friend, foe):
+    boardVal = 0
+    for x in range(0,8):
+        for y in range(0,8):
+            boardVal += getVal(board[x][y], x, y)
+    # For minimizing player return the -ve of the absolute value
+    return boardVal if color=='w' else  -1*boardVal
+
+# Attack on King weights
+def endEval(board,color,friend):
+    boardVal = 0
+    for x in range(5,8):
+        for y in range(2,7):
+            boardVal += endgame[x][y] if board[x][y] in friend else 0
+    # For minimizing player return the -ve of the absolute value
+    return boardVal if color=='w' else  -1*boardVal
+
+
+# Heuristic to determine the hold on central locations and attack on king
+def endCenter(board,color,friend,foe):
+    boardVal = 0
+    for x in range(3,8):
+        for y in range(2,7):
+            #boardVal += center[x][y] if board[x][y] in friend else -1*center[x][y] if board[x][y] in foe else 0
+            boardVal += centking[x][y] if board[x][y] in friend else -1*centking[x][y] if board[x][y] in foe else 0
+    # For minimizing player return the -ve of the absolute value
+    return boardVal if color=='w' else  -1*boardVal
+
 
 def evalBoard(color,board):
-    '''
     if color == 'w':
         friend = 'PNBRQK'
         foe = 'pnbrqk'
-        kingval = 1000000 if 'k' not in board else -1000000 if 'K' not in board else 0
     else:
         friend = 'pnbrqk'
         foe = 'PNBRQK'
-        kingval = -1000000 if 'k' not in board else 1000000 if 'K' not in board else 0
-    '''
 
     #rowWeight = rowEval(board, friend, foe)
     #pieceWeight = pieceEval(board,friend,foe)
     #numPieces = numEval(board,friend,foe)
     #positionalValue = posEval(board, friend, foe)
 
-    return (posEval(board, color) , board)
-    #return (numPieces + pieceWeight, board)
-
+    # Call the position evaluation function that returns both piece val and piece position val
+    #return (kingval + posEval(board,color, friend, foe) + holdCenter(board,color,friend,foe) + endEval(board,color, friend), board)
+    #return (kingval + posEval(board,color, friend, foe) + holdCenter(board,color,friend,foe), board)
+    return (posEval(board,color, friend, foe) + endCenter(board,color,friend,foe), board)
