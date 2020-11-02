@@ -110,7 +110,5 @@ if __name__ == "__main__":
         board = rotate_board(board)
     max_depth = 3
     print(choose(board, color, max_depth, alpha, beta))
-    max_depth = 6
+    max_depth = 5
     print(choose(board, color, max_depth, alpha, beta))
-
-    
